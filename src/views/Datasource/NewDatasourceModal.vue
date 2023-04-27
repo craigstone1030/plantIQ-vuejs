@@ -1,20 +1,23 @@
 <script lang="ts" setup>
-import {reactive, ref} from 'vue';
+import { reactive, ref } from 'vue';
 import useVuelidate from '@vuelidate/core';
-import {helpers, required, url} from '@vuelidate/validators';
-import {useStore} from '@logue/vue2-helpers/vuex';
-import {API_CREATE_DATASOURCE} from '@/store/action';
+import { helpers, required, url } from '@vuelidate/validators';
+import { useDSStore } from '@/stores/datasource';
+
+const store = useDSStore();
 
 const rules = {
   url: {
     required: helpers.withMessage('This field is required', required),
-    // url: helpers.withMessage('This must be an url', url),
+    url: helpers.withMessage('This must be an url', url),
   },
   token: { required: helpers.withMessage('This field is required', required) },
   org: { required: helpers.withMessage('This field is required', required) },
   bucket: { required: helpers.withMessage('This field is required', required) },
   name: { required: helpers.withMessage('This field is required', required) },
-  description: { required: helpers.withMessage('This field is required', required) },
+  description: {
+    required: helpers.withMessage('This field is required', required),
+  },
 };
 
 const form = reactive({
@@ -27,17 +30,16 @@ const form = reactive({
 });
 
 const $v = useVuelidate(rules, form);
-const store = useStore();
 const show = ref(false);
 
-const onSubmit = (event: any) => {
+const onSubmit = async (event: any) => {
   event.preventDefault();
 
   $v.value.$touch();
 
   if ($v.value.$invalid) return;
 
-  store.commit(API_CREATE_DATASOURCE, form);
+  await store.createDatasource(form);
 
   show.value = false;
 
@@ -79,7 +81,9 @@ const validateStatus = (name: string) => {
           type="text"
         />
         <b-form-invalid-feedback id="input-name-feedback">
-          <span v-for="(error, index) in $v.name.$errors" :key="index">{{ error.$message }}</span>
+          <span v-for="(error, index) in $v.name.$errors" :key="index">
+            {{ error.$message }}
+          </span>
         </b-form-invalid-feedback>
       </b-form-group>
 
@@ -95,7 +99,9 @@ const validateStatus = (name: string) => {
           type="text"
         />
         <b-form-invalid-feedback id="input-description-feedback">
-          <span v-for="(error, index) in $v.description.$errors" :key="index">{{ error.$message }}</span>
+          <span v-for="(error, index) in $v.description.$errors" :key="index">
+            {{ error.$message }}
+          </span>
         </b-form-invalid-feedback>
       </b-form-group>
 
@@ -109,7 +115,9 @@ const validateStatus = (name: string) => {
           type="text"
         />
         <b-form-invalid-feedback id="input-url-feedback">
-          <span v-for="(error, index) in $v.url.$errors" :key="index">{{ error.$message }}</span>
+          <span v-for="(error, index) in $v.url.$errors" :key="index">
+            {{ error.$message }}
+          </span>
         </b-form-invalid-feedback>
       </b-form-group>
 
@@ -123,7 +131,9 @@ const validateStatus = (name: string) => {
           type="password"
         />
         <b-form-invalid-feedback id="input-token-feedback">
-          <span v-for="(error, index) in $v.token.$errors" :key="index">{{ error.$message }}</span>
+          <span v-for="(error, index) in $v.token.$errors" :key="index">
+            {{ error.$message }}
+          </span>
         </b-form-invalid-feedback>
       </b-form-group>
 
@@ -137,7 +147,9 @@ const validateStatus = (name: string) => {
           type="text"
         />
         <b-form-invalid-feedback id="input-org-feedback">
-          <span v-for="(error, index) in $v.org.$errors" :key="index">{{ error.$message }}</span>
+          <span v-for="(error, index) in $v.org.$errors" :key="index">
+            {{ error.$message }}
+          </span>
         </b-form-invalid-feedback>
       </b-form-group>
 
@@ -151,23 +163,21 @@ const validateStatus = (name: string) => {
           type="text"
         />
         <b-form-invalid-feedback id="input-bucket-feedback">
-          <span v-for="(error, index) in $v.bucket.$errors" :key="index">{{ error.$message }}</span>
+          <span v-for="(error, index) in $v.bucket.$errors" :key="index">
+            {{ error.$message }}
+          </span>
         </b-form-invalid-feedback>
       </b-form-group>
 
-      <!--      <b-form-group id="input-group-4" v-slot="{ ariaDescribedby }">-->
-      <!--        <b-form-checkbox-group-->
-      <!--          id="checkboxes-4"-->
-      <!--          v-model="form.checked"-->
-      <!--          :aria-describedby="ariaDescribedby"-->
-      <!--        >-->
-      <!--          <b-form-checkbox value="me">Check me out</b-form-checkbox>-->
-      <!--          <b-form-checkbox value="that">Check that out</b-form-checkbox>-->
-      <!--        </b-form-checkbox-group>-->
-      <!--      </b-form-group>-->
-
       <div class="float-right">
-        <b-button class="mx-2" type="button" variant="secondary" @click="hideModal">Cancel</b-button>
+        <b-button
+          class="mx-2"
+          type="button"
+          variant="secondary"
+          @click="hideModal"
+        >
+          Cancel
+        </b-button>
         <b-button type="submit" variant="primary">Submit</b-button>
       </div>
     </b-form>

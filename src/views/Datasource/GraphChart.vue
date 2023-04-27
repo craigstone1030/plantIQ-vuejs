@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import ICON_GRAPH from '@/assets/icon/graph.vue';
 import DatePicker from 'vue2-datepicker';
-import { ref, watch } from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import 'vue2-datepicker/index.css';
-import { useStore } from '@logue/vue2-helpers/vuex';
+import { useDSStore } from '@/stores/datasource';
 
-const store = useStore();
+const store = useDSStore();
 
-const seriesData = ref([]);
+const seriesData = ref<any[]>([]);
 
 const chartOptions = ref({
   rangeSelector: {
@@ -17,7 +17,7 @@ const chartOptions = ref({
     type: 'datetime',
   },
   title: {
-    text: 'InfluxDB Graph',
+    text: '',
   },
   legend: {
     enabled: true,
@@ -31,36 +31,53 @@ const chartOptions = ref({
   series: seriesData,
 });
 
-watch(
-  () => store.state.chartData,
-  () => {
-    const jsonData = store.state.chartData;
+const drawChart = () => {
+  const jsonData = store.getChartData;
 
-    const series: any = {};
-    for (let i = 0; i < jsonData.length; i++) {
-      if (series[jsonData[i][0]] === undefined) {
-        series[jsonData[i][0]] = [];
-      }
-      series[jsonData[i][0]].push([
-        new Date(jsonData[i][1]).getTime(),
-        jsonData[i][2],
-      ]);
+  const series: any = {};
+  for (let i = 0; i < jsonData.length; i++) {
+    if (series[jsonData[i][0]] === undefined) {
+      series[jsonData[i][0]] = [];
     }
+    series[jsonData[i][0]].push([
+      new Date(jsonData[i][1]).getTime(),
+      jsonData[i][2],
+    ]);
+  }
 
-    seriesData.value.splice(0);
-    Object.keys(series).forEach(name => {
-      seriesData.value.push({
-        name,
-        data: series[name],
-      });
-      return null;
+  seriesData.value.splice(0);
+  Object.keys(series).forEach(name => {
+    seriesData.value.push({
+      name,
+      data: series[name],
     });
+    return null;
+  });
+};
+
+onMounted(() => {
+  if (store.getChartData.length) {
+    drawChart();
+  }
+});
+
+watch(
+  () => store.getChartData,
+  () => {
+    drawChart();
   }
 );
 
-const searchByDates = () => {
-  if (store.state.datasourceId !== -1) {
-    store.dispatch('loadChartDataByMetricAndBetweenDates');
+watch(
+  () => store.getMetric,
+  val => {
+    chartOptions.value.title.text = val;
+  }
+);
+
+const searchByDates = async () => {
+  if (store.getCurrentDatasourceId !== -1) {
+    await store.loadChartDataByMetricAndBetweenDates();
   }
 };
 </script>
@@ -81,7 +98,7 @@ const searchByDates = () => {
               </b-input-group-text>
             </b-input-group-prepend>
             <date-picker
-              v-model="store.state.startDt"
+              v-model="store.startDt"
               placeholder=""
               type="datetime"
             />
@@ -93,11 +110,7 @@ const searchByDates = () => {
                 END
               </b-input-group-text>
             </b-input-group-prepend>
-            <date-picker
-              v-model="store.state.endDt"
-              placeholder=""
-              type="datetime"
-            />
+            <date-picker v-model="store.endDt" placeholder="" type="datetime" />
           </b-input-group>
 
           <b-button class="mt-[-5px]" variant="primary" @click="searchByDates">

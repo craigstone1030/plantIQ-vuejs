@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import Vue, { onMounted } from 'vue';
+import { onMounted } from 'vue';
 
-onMounted(() => {
-
-});
+onMounted(() => {});
 </script>
 
 <template>

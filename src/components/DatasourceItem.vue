@@ -3,32 +3,18 @@ import ICON_DATASOURCE from '@/assets/icon/db.vue';
 import ICON_SUCCESS from '@/assets/icon/status/success.svg';
 import ICON_WARNING from '@/assets/icon/status/warning.svg';
 import { Status } from '@/model/status';
-import { useStore } from '@logue/vue2-helpers/vuex';
-import { API_GET_METRICS_BY_DB_ID } from '@/store/action';
 
 export interface Props {
-  id: number;
   name: string;
   status: Status;
   url: string;
 }
 
-const prop = defineProps<Props>();
-
-const store = useStore();
-
-const dbItemClicked = e => {
-  store.dispatch('loadMetricsByDbId', prop.id).then(() => {
-    for (const element of document.getElementsByClassName('db-item')) {
-      element.classList.remove('active');
-    }
-    e.currentTarget.classList.add('active');
-  });
-};
+defineProps<Props>();
 </script>
 
 <template>
-  <div class="db-item p-2 hover:bg-sky-100 transition" @click="dbItemClicked">
+  <div class="db-item p-2">
     <div class="d-flex justify-between">
       <span class="text-base font-semibold">
         <ICON_DATASOURCE />
@@ -59,9 +45,5 @@ const dbItemClicked = e => {
 .db-item {
   border: 1px solid #dddddd;
   border-radius: 10px;
-
-  &.active {
-    background-color: skyblue;
-  }
 }
 </style>

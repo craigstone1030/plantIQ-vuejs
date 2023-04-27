@@ -1,23 +1,30 @@
 <script setup lang="ts">
 import Header from '@/views/Layout/Header.vue';
 import Footer from '@/views/Layout/Footer.vue';
-import {useStore} from '@logue/vue2-helpers/vuex';
+import { useGlobalStore } from '@/stores/global';
 
 document.title = import.meta.env.VITE_APP_TITLE || 'Plant IQ';
 
-const store = useStore();
+const store = useGlobalStore();
 </script>
 
 <template>
   <div>
-    <b-overlay :show="store.state.overlay" rounded="sm">
-      <Header />
+    <Header />
 
-      <main>
-        <router-view />
-      </main>
+    <main>
+      <router-view />
+    </main>
 
-      <Footer />
-    </b-overlay>
+    <Footer />
+
+    <b-overlay
+      v-if="store.overlay"
+      :show="true"
+      class="position-fixed w-100 h-100 top-0 z-[9999]"
+      rounded="sm"
+    />
+
+    <notifications position="top center" />
   </div>
 </template>
