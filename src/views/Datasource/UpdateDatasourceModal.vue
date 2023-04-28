@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import { helpers, required, url } from '@vuelidate/validators';
 import { useDSStore } from '@/stores/datasource';
@@ -30,6 +30,8 @@ const form = reactive({
   description: ref(''),
 });
 
+const modalRef = ref();
+
 const $v = useVuelidate(rules, form);
 const show = ref(false);
 
@@ -40,7 +42,7 @@ const onSubmit = async (event: any) => {
 
   if ($v.value.$invalid) return;
 
-  await store.createDatasource(form);
+  await store.updateDatasource(store.getCurrentDatasourceId, form);
 
   show.value = false;
 
@@ -67,16 +69,34 @@ const validateStatus = (name: string) => {
   const { $dirty, $error } = $v.value[name];
   return $dirty ? !$error : null;
 };
+
+watch(
+  () => show.value,
+  val => {
+    if (val) {
+      const datasource = store.getDatasourceList.find(
+        i => i.pk === store.getCurrentDatasourceId
+      );
+      form.name = datasource.fields.name;
+      form.description = datasource.fields.description;
+      form.url = datasource.fields.url;
+      form.token = datasource.fields.token;
+      form.org = datasource.fields.org;
+      form.bucket = datasource.fields.bucket;
+    }
+  }
+);
 </script>
 
 <template>
   <b-modal
-    id="new-datasource-modal"
+    id="update-datasource-modal"
+    ref="modalRef"
     v-model="show"
     :hide-footer="true"
     centered
     size="md"
-    title="New data source"
+    title="Update data source"
   >
     <b-form @submit="onSubmit">
       <b-form-group label="Name:" label-for="input-name">
