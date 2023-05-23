@@ -46,6 +46,8 @@
     "bootstrap-vue": "^2.23.1",
     "highcharts": "^10.3.3",
     "highcharts-vue": "^1.4.0",
+    "jsonwebtoken": "^9.0.0",
+    "jwt-decode": "^3.1.2",
     "pinia": "^2.0.34",
     "socket.io-client": "^4.6.1",
     "sweetalert2": "^11.7.3",
@@ -61,6 +63,7 @@
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.1",
+    "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^18.15.8",
     "@types/vue2-datepicker": "^3.3.1",
     "@typescript-eslint/eslint-plugin": "^5.56.0",

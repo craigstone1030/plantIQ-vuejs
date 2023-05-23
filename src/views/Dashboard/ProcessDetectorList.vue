@@ -1,44 +1,57 @@
 <script setup lang="ts">
 import Process from '@/components/Dashboard/Process.vue';
 import { Status } from '@/model/status';
+import { useDashboardStore } from '@/stores/dashboard';
+import { onMounted, watch } from 'vue';
+import { useProcessStore } from '@/stores/process';
 
-const processList: Process.Props[] = [
-  {
-    date: new Date(),
-    actualScore: 1.2,
-    topAlerts: 1,
-    maxAnomaly: 0.4,
-    status: Status.ACTIVATED,
-  },
-  {
-    date: new Date(),
-    actualScore: 1.5,
-    topAlerts: 2,
-    maxAnomaly: 1.1,
-    status: Status.PENDING,
-  },
-  {
-    date: new Date(),
-    actualScore: 1.5,
-    topAlerts: 1,
-    maxAnomaly: 1.1,
-    status: Status.DISABLED,
-  },
-];
+const store = useDashboardStore();
+const processStore = useProcessStore();
+
+watch(
+  () => store.getSelectedProcessId,
+  async val => {
+    if (val !== -1) {
+      await store.loadMonitorsByProcessId();
+    }
+  }
+);
+
+const onSelectMonitor = (id: number) => {
+  store.setCurrentDetectorId(id);
+};
 </script>
 
 <template>
   <b-card>
-    <p class="card-head">Process - Cutting</p>
+    <p class="card-head">
+      Process
+      <span v-if="store.getSelectedProcessId !== -1">
+        -
+        {{
+          processStore.getProcessList.find(
+            i => i.pk === store.getSelectedProcessId
+          ).fields.name
+        }}
+      </span>
+    </p>
+
+    <span v-if="store.getSelectedProcessId === -1">
+      Click process to show monitors
+    </span>
+    <span v-else-if="store.getMonitors.length === 0">No monitors ...</span>
 
     <Process
-      v-for="(process, index) in processList"
+      v-for="(process, index) in store.getMonitors"
+      :id="process.detectorId"
       :key="index"
+      :active="store.getSelectedDetectorId === process.detectorId"
       :actual-score="process.actualScore"
-      :date="process.date"
+      :date="process.lastUpdatedAt"
       :max-anomaly="process.maxAnomaly"
       :status="process.status"
-      :top-alerts="process.topAlerts"
+      :top-alerts="process.totalAlerts"
+      @click="onSelectMonitor"
     />
   </b-card>
 </template>

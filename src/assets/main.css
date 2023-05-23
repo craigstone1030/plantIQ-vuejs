@@ -6,11 +6,16 @@
 
 body {
   padding-top: 73px;
+  padding-bottom: 30px;
   background-color: #eaeef3;
 }
 
 main {
   padding: 0 1rem 1.5rem 1rem;
+}
+
+.footer {
+  z-index: 9999;
 }
 
 .vertical-center {
@@ -48,7 +53,7 @@ main {
 }
 
 .slick-slide {
-  padding: 0 1rem 1rem 1rem;
+  padding: 0 1rem 0.5rem 1rem;
 }
 
 .icon-item {

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import logo from '@/assets/vue.svg';
+import logo from '@/assets/logo.svg';
 
 import ICON_NAV_DASHBOARD from '@/assets/icon/nav/dashboard.vue';
 import ICON_NAV_DATASOURCE from '@/assets/icon/nav/datasource.vue';
@@ -12,11 +12,33 @@ import IMG_AVATAR from '@/assets/icon/avatar.png';
 import ICON_NAV_SETTING from '@/assets/icon/nav/setting.vue';
 import ICON_NAV_BELL from '@/assets/icon/nav/bell.vue';
 import NavItem from '@/components/nav/NavItem.vue';
+import { useGlobalStore } from '@/stores/global';
+import { useRouter } from 'vue-router/composables';
+import { useDashboardStore } from '@/stores/dashboard';
+import { useAlertStore } from '@/stores/alert';
+import { useDSStore } from '@/stores/datasource';
+import { useDetectorStore } from '@/stores/detector';
+import { useProcessStore } from '@/stores/process';
+
+const globalStore = useGlobalStore();
+const router = useRouter();
+
+const onLogout = () => {
+  globalStore.logout();
+  globalStore.$reset();
+  useDashboardStore().$reset();
+  useAlertStore().$reset();
+  useDSStore().$reset();
+  useDetectorStore().$reset();
+  useProcessStore().$reset();
+  router.push({ name: 'Login' });
+};
 </script>
 
 <template>
   <header>
     <b-navbar
+      v-show="globalStore.getCurrentUser.email"
       class="lg:!py-0"
       fixed="top"
       toggleable="lg"
@@ -24,7 +46,7 @@ import NavItem from '@/components/nav/NavItem.vue';
       variant="nav"
     >
       <b-navbar-brand href="#">
-        <img :src="logo" alt="Vue logo" />
+        <img :src="logo" alt="Vue logo" width="130" height="30" />
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse" />
@@ -43,7 +65,7 @@ import NavItem from '@/components/nav/NavItem.vue';
           <NavItem href="/detector" title="detectors">
             <ICON_NAV_DETECTORS />
           </NavItem>
-          <NavItem href="/alerts" title="alerts">
+          <NavItem href="/alert" title="alerts">
             <ICON_NAV_ALERTS />
           </NavItem>
         </b-navbar-nav>
@@ -81,7 +103,13 @@ import NavItem from '@/components/nav/NavItem.vue';
           <b-dropdown-item href="#">FA</b-dropdown-item>
         </b-nav-item-dropdown>
 
-        <b-nav-item-dropdown id="avatar" class="vertical-center" no-caret right>
+        <b-nav-item-dropdown
+          v-show="globalStore.getCurrentUser.username"
+          id="avatar"
+          class="vertical-center"
+          no-caret
+          right
+        >
           <template #button-content>
             <img
               :src="IMG_AVATAR"
@@ -89,12 +117,9 @@ import NavItem from '@/components/nav/NavItem.vue';
               class="d-inline-block"
               width="25px"
             />
-            Coolper.J
+            {{ globalStore.getCurrentUser.username }}
           </template>
-          <b-dropdown-item href="#">EN</b-dropdown-item>
-          <b-dropdown-item href="#">ES</b-dropdown-item>
-          <b-dropdown-item href="#">RU</b-dropdown-item>
-          <b-dropdown-item href="#">FA</b-dropdown-item>
+          <b-dropdown-item href="#" @click="onLogout">Logout</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-navbar>

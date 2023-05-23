@@ -1,40 +1,28 @@
 <script setup lang="ts">
-import ICON_PROCESS from '@/assets/icon/nav/process.vue';
+import ICON_ALERT from '@/assets/icon/nav/alerts.vue';
 import { Status } from '@/model/status';
-import Vue, { onUpdated, ref, watch } from 'vue';
-import { useProcessStore } from '@/stores/process';
+import { onUpdated, ref } from 'vue';
 
 const props = defineProps({
   id: { type: Number, required: true },
   name: { type: String, required: true },
-  activated: { type: Number, required: true },
   description: { type: String, required: true },
-  checked: { type: Boolean, default: true },
+  status: { type: Number, required: true },
   static: { type: Boolean, default: true },
 });
 
-const emit = defineEmits(['click']);
-const status = ref(false);
+const status = ref(props.status);
 
-const store = useProcessStore();
+const emit = defineEmits(['click']);
 
 onUpdated(() => {
-  status.value = props.activated === 1;
+  status.value = props.status;
 });
 
-const loadMetrics = () => {
+const loadHistory = () => {
   emit('click', props.id);
 };
-
-const onChange = async () => {
-  await store.updateStatus(props.id, !status.value);
-  status.value = !status.value;
-  Vue.notify({
-    text: 'Status changed',
-  });
-};
 </script>
-
 <template>
   <div
     class="flex gap-1 px-1 my-2 align-items-center cursor-pointer rounded-md transition-all hover:bg-[#E5E7EB]"
@@ -42,13 +30,13 @@ const onChange = async () => {
     <a
       class="flex flex-1 gap-1 py-1 align-items-center cursor-pointer"
       href="#"
-      @click="loadMetrics"
+      @click="loadHistory"
     >
-      <ICON_PROCESS v-b-tooltip="description" class="icon-item" />
+      <ICON_ALERT v-b-tooltip="description" class="icon-item" />
       <div>{{ name }}</div>
     </a>
 
-    <b-checkbox v-if="!static" v-model="status" switch @change="onChange" />
+    <b-checkbox v-if="!static" v-model="status" switch />
     <span
       v-else
       class="rounded-pill text-xs"

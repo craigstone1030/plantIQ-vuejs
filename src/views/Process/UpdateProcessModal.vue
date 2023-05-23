@@ -7,7 +7,7 @@ import MetricListItem from '@/components/Process/MetricListItem.vue';
 import { useDSStore } from '@/stores/datasource';
 import { useProcessStore } from '@/stores/process';
 import { API } from '@/api';
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
 
 const dsStore = useDSStore();
 const processStore = useProcessStore();
@@ -57,7 +57,7 @@ const onSubmit = async (event: any) => {
     return;
   }
 
-  await processStore.updateProcess({
+  await processStore.updateProcess(processStore.getSelectedProcessId, {
     dsId: selectedDatasource.value,
     name: form.name,
     description: form.description,

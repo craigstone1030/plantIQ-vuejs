@@ -1,19 +1,19 @@
 <script lang="ts" setup>
 import VueSlickCarousel from 'vue-slick-carousel';
 import ProcessTab from '@/components/Dashboard/ProcessTab.vue';
-import { ref } from 'vue';
-import { ProcessModel } from '@/model/processModel';
-import { Status } from '@/model/status';
+import { onMounted } from 'vue';
 
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
+import { useProcessStore } from '@/stores/process';
+import { useDashboardStore } from '@/stores/dashboard';
 
-const currentPage = ref(1);
-const pages = 2;
+const processStore = useProcessStore();
+const store = useDashboardStore();
 
 const slickSetting = {
   arrows: false,
-  dots: false,
+  dots: true,
   focusOnSelect: true,
   slidesToShow: 3,
   slidesToScroll: 3,
@@ -44,71 +44,51 @@ const slickSetting = {
   ],
 };
 
-const processTabList: ProcessModel[] = [
-  {
-    name: 'Cutting',
-    status: Status.ACTIVATED,
-    detectors: [
-      {
-        name: 'D1',
-        status: Status.ACTIVATED,
-      },
-    ],
-  },
-  {
-    name: 'Cutting',
-    status: Status.ACTIVATED,
-    detectors: [
-      {
-        name: 'D1',
-        status: Status.ACTIVATED,
-      },
-    ],
-  },
-  {
-    name: 'Cutting',
-    status: Status.ACTIVATED,
-    detectors: [
-      {
-        name: 'D1',
-        status: Status.ACTIVATED,
-      },
-    ],
-  },
-  {
-    name: 'Cutting',
-    status: Status.ACTIVATED,
-    detectors: [
-      {
-        name: 'D1',
-        status: Status.ACTIVATED,
-      },
-    ],
-  },
-];
+const onSelectTab = (id: number) => {
+  store.setCurrentProcessId(id);
+};
+
+onMounted(async () => {
+  await processStore.loadProcessList(false);
+  if (processStore.getProcessList.length)
+    store.setCurrentProcessId(processStore.processList[0].pk);
+});
 </script>
 
 <template>
-  <div>
-    <VueSlickCarousel v-bind="slickSetting">
+  <div :class="{ 'flex h-full': processStore.getProcessList.length === 0 }">
+    <VueSlickCarousel
+      v-if="processStore.getProcessList.length"
+      v-bind="slickSetting"
+      class="mb-5"
+    >
       <ProcessTab
-        v-for="(pTab, index) in processTabList"
+        v-for="(pTab, index) in processStore.getProcessList"
         :key="index"
+        :active="store.getSelectedProcessId === pTab.pk"
         v-bind="pTab"
+        @click="onSelectTab"
       />
     </VueSlickCarousel>
-
-    <b-pagination-nav
-      v-model="currentPage"
-      :number-of-pages="pages"
-      class="mb-0"
-      align="center"
-      base-url="#"
-      first-number
-      last-number
-      next-text=">"
-      pills
-      prev-text="<"
-    />
+    <b-card v-else class="w-100 none">No process ...</b-card>
+    <!--    <b-pagination-nav-->
+    <!--      v-model="currentPage"-->
+    <!--      :number-of-pages="pages"-->
+    <!--      class="mb-0"-->
+    <!--      align="center"-->
+    <!--      base-url="#"-->
+    <!--      first-number-->
+    <!--      last-number-->
+    <!--      next-text=">"-->
+    <!--      pills-->
+    <!--      prev-text="<"-->
+    <!--    />-->
   </div>
 </template>
+<style scoped>
+.none .card-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

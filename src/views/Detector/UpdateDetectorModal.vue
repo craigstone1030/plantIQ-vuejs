@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import Vue, {computed, reactive, ref, watch} from 'vue';
+import Vue, { computed, reactive, ref, watch } from 'vue';
 import useVuelidate from '@vuelidate/core';
-import {helpers, required} from '@vuelidate/validators';
+import { helpers, required } from '@vuelidate/validators';
 import DatasourceListItem from '@/components/Process/DatasourceListItem.vue';
 import MetricListItem from '@/components/Process/MetricListItem.vue';
-import {useDSStore} from '@/stores/datasource';
-import {useProcessStore} from '@/stores/process';
-import {useDetectorStore} from '@/stores/detector';
-import Swal from "sweetalert2";
+import { useDSStore } from '@/stores/datasource';
+import { useProcessStore } from '@/stores/process';
+import { useDetectorStore } from '@/stores/detector';
+import Swal from 'sweetalert2';
 
 const dsStore = useDSStore();
 const processStore = useProcessStore();
@@ -70,7 +70,7 @@ const onSubmit = async (event: any) => {
     return;
   }
 
-  await detectorStore.updateDetector({
+  await detectorStore.updateDetector(detectorStore.getSelectedDetectorId, {
     processId: selectedProcess.value,
     name: form.name,
     description: form.description,

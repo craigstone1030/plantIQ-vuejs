@@ -1,7 +1,7 @@
 import { useSocketStoreWithOut } from '@/stores/socket';
 
 export const openSocket = (): void => {
-  const ws = new WebSocket('ws://localhost:8089');
+  const ws = new WebSocket('ws://54.85.82.33:8089');
 
   const socketStore = useSocketStoreWithOut();
 

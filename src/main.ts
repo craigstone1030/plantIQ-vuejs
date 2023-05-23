@@ -18,21 +18,36 @@ import '@/assets/main.css';
 
 import App from '@/App.vue';
 import { PiniaVuePlugin } from 'pinia';
+import { useGlobalStore } from '@/stores/global';
+import { appHttp } from '@/axios';
 
 Vue.config.productionTip = false;
 Vue.component('Teleport', teleport);
-Vue.filter('date_format', (value: Date) => {
-  const year = value.getFullYear();
-  const month = value.getMonth();
-  const day = value.getDay();
+Vue.filter('date_format', (value: Date | string) => {
+  if (value === null) return 'NaN';
+  const data = new Date(value);
+  const year = data.getFullYear();
+  const month = data.getMonth();
+  const day = data.getDay();
   return `${year}/${month}/${day}`;
 });
-Vue.filter('time_format', (value: Date) => {
-  const hour = value.getHours();
-  const min = value.getMinutes();
-  const sec = value.getSeconds();
+Vue.filter('time_format', (value: Date | string) => {
+  if (value === null) return '';
+  const data = new Date(value);
+  const hour = data.getHours();
+  const min = data.getMinutes();
+  const sec = data.getSeconds();
   return `${hour}:${min}:${sec}`;
 });
+Vue.filter('number', (value: number) => {
+  if (value == null) return 'NaN';
+  return value.toFixed(2);
+});
+
+if (localStorage.getItem('plant-iq-token')) {
+  appHttp.defaults.headers.common.Authorization =
+    localStorage.getItem('plant-iq-token');
+}
 
 // Bootstrap Config
 Vue.use(BootstrapVue);
@@ -47,14 +62,14 @@ Vue.use(HighchartsVue);
 // Pinia Config - Vuex Alternative
 Vue.use(PiniaVuePlugin);
 
-// Socket Config
-openSocket();
-
 const vue = new Vue({
   router,
   render: h => h(App),
   pinia: store,
 });
+
+// Socket Config
+openSocket();
 
 // Run!
 router

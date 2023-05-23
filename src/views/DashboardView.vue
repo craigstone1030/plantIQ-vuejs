@@ -17,7 +17,7 @@ import ProcessStatisticsChart from '@/views/Dashboard/ProcessStatisticsChart.vue
       </b-col>
     </b-row>
 
-    <b-row>
+    <b-row class="mt-2">
       <b-col md="4">
         <process-detector-list />
       </b-col>
@@ -35,7 +35,6 @@ import ProcessStatisticsChart from '@/views/Dashboard/ProcessStatisticsChart.vue
     border-radius: 10px;
     box-shadow: -8px 8px 8px #dadee8;
   }
-
   .card-head {
     color: #3a405b;
     font-weight: 600;

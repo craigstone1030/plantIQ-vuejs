@@ -5,6 +5,7 @@ import { useDetectorStoreWithOut } from '@/stores/detector';
 interface SocketStore {
   isConnected: boolean;
   message: object;
+  currentMessage: any;
   reconnectError: boolean;
   heartBeatInterval: number;
   heartBeatTimer: number;
@@ -14,6 +15,7 @@ export const useSocketStore = defineStore('socket', {
   state: (): SocketStore => ({
     isConnected: false,
     message: {},
+    currentMessage: {},
     reconnectError: false,
     heartBeatInterval: 50000,
     heartBeatTimer: 0,
@@ -38,10 +40,10 @@ export const useSocketStore = defineStore('socket', {
     SOCKET_ONMESSAGE(message: any) {
       const detectorStore = useDetectorStoreWithOut();
       const data = JSON.parse(message.data);
+      this.currentMessage = data;
 
       if (data.detectorId === detectorStore.getSelectedDetectorId) {
         this.message = data;
-        console.log(this.message);
         detectorStore.loadMoreRecords(this.message);
       }
     },

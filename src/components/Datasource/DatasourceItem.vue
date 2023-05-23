@@ -27,7 +27,6 @@ defineProps<Props>();
       </span>
 
       <span class="text-[#828080]">
-        {{ status }}
         <template v-if="status === Status.ACTIVATED">
           <img :src="ICON_SUCCESS" alt="activated" width="20" />
         </template>

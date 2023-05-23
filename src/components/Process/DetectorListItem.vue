@@ -1,26 +1,37 @@
 <script setup lang="ts">
 import ICON_DETECTOR from '@/assets/icon/nav/detectors.vue';
 import { Status } from '@/model/status';
-import { onUpdated, ref } from 'vue';
+import Vue, { onUpdated, ref } from 'vue';
+import { useDetectorStore } from '@/stores/detector';
 
 const props = defineProps({
   id: { type: Number, required: true },
   name: { type: String, required: true },
   description: { type: String, required: true },
-  status: { type: Boolean, required: true },
+  status: { type: Number, required: true },
   static: { type: Boolean, default: true },
 });
 
-const status = ref(props.status);
+const status = ref(false);
+
+const store = useDetectorStore();
 
 const emit = defineEmits(['click']);
 
 onUpdated(() => {
-  status.value = props.status;
+  status.value = props.status === 1;
 });
 
 const loadMetrics = () => {
   emit('click', props.id);
+};
+
+const onChange = async () => {
+  await store.updateStatus(props.id, !status.value);
+  status.value = !status.value;
+  Vue.notify({
+    text: 'Status changed',
+  });
 };
 </script>
 <template>
@@ -36,7 +47,7 @@ const loadMetrics = () => {
       <div>{{ name }}</div>
     </a>
 
-    <b-checkbox v-if="!static" v-model="status" switch />
+    <b-checkbox v-if="!static" v-model="status" switch @change="onChange" />
     <span
       v-else
       class="rounded-pill text-xs"

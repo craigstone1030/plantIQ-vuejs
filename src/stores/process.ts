@@ -47,6 +47,23 @@ export const useProcessStore = defineStore('process', {
       await API.process.createProcess(form);
       await this.loadProcessList();
     },
+    async updateStatus(id: number, status: boolean) {
+      const res = await API.process.updateStatusByProcessId(id, status);
+      const json = JSON.parse(res.data);
+      this.processList.map(i => {
+        if (i.pk === id) {
+          i.fields.status = parseInt(json.fields.status);
+        }
+      });
+    },
+    async updateProcess(id: number, process: any) {
+      await API.process.updateProcess(id, process);
+      await this.loadProcessList();
+    },
+    async deleteProcess(id: number) {
+      await API.process.deleteProcess(id);
+      await this.loadProcessList();
+    },
     async loadProcessList(force = true) {
       if (!force && this.processList.length) return;
       const res = await API.process.loadProcessList();
@@ -62,6 +79,8 @@ export const useProcessStore = defineStore('process', {
     },
     async setCurrentProcess(id: number) {
       this.processId = id;
+      this.metrics = [];
+      this.detectors = [];
     },
   },
 });
