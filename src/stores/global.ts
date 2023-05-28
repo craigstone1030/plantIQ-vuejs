@@ -15,6 +15,8 @@ interface GlobalState {
   disable: boolean;
   token: string;
   user: IUser;
+  startDt: Date;
+  endDt: Date;
 }
 
 let timeId = -1;
@@ -29,6 +31,8 @@ export const useGlobalStore = defineStore('global', {
       email: '',
       username: '',
     },
+    startDt: new Date(new Date().getTime() - 3600 * 6 * 1000),
+    endDt: new Date(new Date().getTime() + 3600 * 6 * 1000),
   }),
   getters: {
     getOverlay(state): boolean {

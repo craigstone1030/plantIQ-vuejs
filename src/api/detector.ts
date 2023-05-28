@@ -75,4 +75,13 @@ export default {
       },
     });
   },
+  async loadTrendGraphByDetectorId(
+    id: number
+  ) {
+    return await appHttp.get('/api/detector/trendgraphdata', {
+      params: {
+        detectorId: id,
+      },
+    });
+  }
 };

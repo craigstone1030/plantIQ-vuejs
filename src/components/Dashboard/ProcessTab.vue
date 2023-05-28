@@ -50,12 +50,12 @@ onMounted(async () => {
   globalStore.lockScreen();
   const res = await API.process.loadDetectorsByProcessId(props.pk);
   const resArray = JSON.parse(res.data);
-  if (
-    processStore.getProcessList.length &&
-    resArray.length &&
-    processStore.getProcessList[0].pk === store.getSelectedProcessId
-  )
-    store.setCurrentDetectorId(resArray[0].pk);
+  // if (
+  //   processStore.getProcessList.length &&
+  //   resArray.length &&
+  //   processStore.getProcessList[0].pk === store.getSelectedProcessId
+  // )
+  //   store.setCurrentDetectorId(resArray[0].pk);
   globalStore.unlockScreen();
   detectors.value = resArray;
   if (res.data.length) {
@@ -67,13 +67,13 @@ onMounted(async () => {
   <b-card
     class="max-w-[300px] px-2 cursor-pointer"
     :class="{
-      '!bg-gray-300': active,
-      'bg-white': !active,
+      '!border-2 !border-sky-600': active,
+      '!border-2 !border-white': !active,
     }"
     @click="clickEvent"
   >
     <div class="d-flex justify-between">
-      <a class="text-base font-weight-bold hover:cursor-pointer" href="#">
+      <a class="text-base font-weight-bold hover:cursor-pointer" :style="{ whiteSpace: 'nowrap'}" href="#">
         {{ fields.name }}
       </a>
       <span

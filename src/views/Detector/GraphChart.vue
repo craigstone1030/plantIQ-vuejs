@@ -4,15 +4,46 @@ import DatePicker from 'vue2-datepicker';
 import { onMounted, ref, watch } from 'vue';
 import 'vue2-datepicker/index.css';
 import { useDetectorStore } from '@/stores/detector';
-import { useSocketStore } from '@/stores/socket';
+import { useGlobalStore } from '@/stores/global';
 
 const store = useDetectorStore();
+const globalStore = useGlobalStore();
 
 const seriesData = ref<any[]>([]);
 
 const chartOptions = ref({
   rangeSelector: {
-    selected: 1,
+    buttons: [
+      {
+        type: 'hour',
+        count: 24,
+        text: '24h',
+      },
+      {
+        type: 'month',
+        count: 3,
+        text: '3m',
+      },
+      {
+        type: 'month',
+        count: 6,
+        text: '6m',
+      },
+      {
+        type: 'ytd',
+        text: 'YTD',
+      },
+      {
+        type: 'year',
+        count: 1,
+        text: '1y',
+      },
+      {
+        type: 'all',
+        text: 'All',
+      },
+    ],
+    selector: 1,
   },
   xAxis: {
     type: 'datetime',
@@ -101,7 +132,7 @@ const searchByDates = async () => {
               </b-input-group-text>
             </b-input-group-prepend>
             <date-picker
-              v-model="store.startDt"
+              v-model="globalStore.startDt"
               placeholder=""
               type="datetime"
             />
@@ -113,7 +144,7 @@ const searchByDates = async () => {
                 END
               </b-input-group-text>
             </b-input-group-prepend>
-            <date-picker v-model="store.endDt" placeholder="" type="datetime" />
+            <date-picker v-model="globalStore.endDt" placeholder="" type="datetime" />
           </b-input-group>
 
           <b-button class="mt-[-5px]" variant="primary" @click="searchByDates">

@@ -38,6 +38,17 @@ export const useAlertStore = defineStore('alert', {
       this.alerts = JSON.parse(res.data);
     },
 
+    async updateStatus(id: number, status: number) {
+      const res = await API.alert.updateStatusByAlertId(id, status);
+      const json = JSON.parse(res.data);
+      this.alerts.map(i => {
+        if (i.pk === id) {
+          i.fields.status = parseInt(json.fields.status);
+        }
+        return null;
+      });
+    },
+
     async createAlert(form: any) {
       await API.alert.createAlert(this.detectorId, form);
       await this.loadAlertsByDetectorId();

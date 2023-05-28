@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { API } from '@/api';
 import ICON_ALERT from '@/assets/icon/nav/alerts.vue';
 import { Status } from '@/model/status';
-import { onUpdated, ref } from 'vue';
+import { store } from '@/stores';
+import { useAlertStore } from '@/stores/alert';
+import Vue, { onUpdated, ref } from 'vue';
 
 const props = defineProps({
   id: { type: Number, required: true },
@@ -11,16 +14,26 @@ const props = defineProps({
   static: { type: Boolean, default: true },
 });
 
-const status = ref(props.status);
+const store = useAlertStore();
+
+const status = ref(false);
 
 const emit = defineEmits(['click']);
 
 onUpdated(() => {
-  status.value = props.status;
+  status.value = props.status === 1;
 });
 
 const loadHistory = () => {
   emit('click', props.id);
+};
+
+const onChange = async () => {
+  await store.updateStatus(props.id, status.value ? 0 : 1)
+  status.value = !status.value;
+  Vue.notify({
+    text: 'Status changed',
+  });
 };
 </script>
 <template>
@@ -36,7 +49,7 @@ const loadHistory = () => {
       <div>{{ name }}</div>
     </a>
 
-    <b-checkbox v-if="!static" v-model="status" switch />
+    <b-checkbox v-if="!static" v-model="status" switch @change="onChange" />
     <span
       v-else
       class="rounded-pill text-xs"

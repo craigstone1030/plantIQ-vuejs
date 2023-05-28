@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import useVuelidate from '@vuelidate/core';
-import { helpers, required, url } from '@vuelidate/validators';
+import { helpers, numeric, required, url } from '@vuelidate/validators';
 import { useDSStore } from '@/stores/datasource';
 import {useAlertStore} from "@/stores/alert";
 
@@ -10,8 +10,14 @@ const store = useAlertStore();
 const rules = {
   name: { required: helpers.withMessage('This field is required', required) },
   description: { required: helpers.withMessage('This field is required', required) },
-  treshold1: { required: helpers.withMessage('This field is required', required) },
-  treshold2: { required: helpers.withMessage('This field is required', required) },
+  treshold1: { 
+    required: helpers.withMessage('This field is required', required),
+    numeric: helpers.withMessage('This field must be a number', numeric),
+  },
+  treshold2: { 
+    required: helpers.withMessage('This field is required', required),
+    numeric: helpers.withMessage('This field must be a number', numeric),
+  },
   duration: { required: helpers.withMessage('This field is required', required), },
 };
 
@@ -99,16 +105,14 @@ const validateStatus = (name: string) => {
           </b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group label="Treshold1:" label-for="input-description">
+        <b-form-group label="Nearcriticaltreshold:" label-for="input-description">
           <b-form-input
             id="input-treshold1"
             v-model="form.treshold1"
             :state="validateStatus('treshold1')"
             aria-describedby="input-treshold1-feedback"
-            max-rows="3"
-            placeholder="Enter Treshold1"
-            rows="3"
-            type="number"
+            placeholder="Enter nearcriticaltreshold"
+            type="text"
           />
           <b-form-invalid-feedback id="input-treshold1-feedback">
             <span v-for="(error, index) in $v.treshold1.$errors" :key="index">
@@ -117,16 +121,14 @@ const validateStatus = (name: string) => {
           </b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group label="Treshold2:" label-for="input-description">
+        <b-form-group label="Criticaltreshold:" label-for="input-description">
           <b-form-input
             id="input-treshold2"
             v-model="form.treshold2"
             :state="validateStatus('treshold2')"
             aria-describedby="input-treshold2-feedback"
-            max-rows="3"
-            placeholder="Enter Treshold2"
-            rows="3"
-            type="number"
+            placeholder="Enter criticaltreshold"
+            type="text"
           />
           <b-form-invalid-feedback id="input-treshold2-feedback">
             <span v-for="(error, index) in $v.treshold2.$errors" :key="index">

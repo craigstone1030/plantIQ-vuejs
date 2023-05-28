@@ -15,7 +15,7 @@ const lock = ref(true);
 
 const chartOptions = ref({
   rangeSelector: {
-    selected: 1,
+    selector: 1,
   },
   xAxis: {
     type: 'datetime',
@@ -45,6 +45,7 @@ watch(
   () => store.getSelectedDetectorId,
   async val => {
     lock.value = true;
+    console.log(val);
     if (store.getSelectedDetectorId !== -1)
       await store.loadChartDataByDetectorId();
     lock.value = false;
@@ -81,6 +82,7 @@ watch(
     const alertJson = {
       treshold1: {
         type: 'flags',
+        name: 'NearCriticalTreshold',
         accessibility: {
           exposeAsGroupOnly: true,
           description: 'Flagged events.',
@@ -96,6 +98,7 @@ watch(
       },
       treshold2: {
         type: 'flags',
+        name: 'CriticalTreshold',
         accessibility: {
           exposeAsGroupOnly: true,
           description: 'Flagged events.',
@@ -111,6 +114,7 @@ watch(
       },
       treshold3: {
         type: 'flags',
+        name: 'Normal',
         accessibility: {
           exposeAsGroupOnly: true,
           description: 'Flagged events.',
@@ -219,22 +223,23 @@ watch(
 <template>
   <b-card>
     <p class="card-head">
-      Process Anomaly
-      <span v-if="store.getSelectedProcessId !== -1">
+      Anomaly Graph
+      <span v-if="store.getSelectedDetectorId !== -1">
         -
         {{
-          processStore.getProcessList.find(
-            i => i.pk === store.getSelectedProcessId
-          ).fields.name
+          store.getMonitors.find(i => i.detectorId === store.getSelectedDetectorId).name
         }}
       </span>
     </p>
 
-    <highcharts
-      v-if="store.getSelectedProcessId !== -1"
-      :constructor-type="'stockChart'"
-      :options="chartOptions"
-    />
-    <span v-else>No detector selected...</span>
+    <!-- <div
+      v-if="
+        store.getSelectedDetectorId !== -1 &&
+        store.getChartData.records.length !== 0
+      "
+    > -->
+      <highcharts :constructor-type="'stockChart'" :options="chartOptions" />
+    <!-- </div> -->
+    <!-- <span v-else>No data ...</span> -->
   </b-card>
 </template>

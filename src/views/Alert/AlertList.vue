@@ -77,7 +77,7 @@ const onDeleteEvent = async () => {
               :role="store.getSelectedAlertId === -1 ? '' : 'button'"
               @click="onDeleteEvent"
             >
-              <ICON_TRASH/>
+              <ICON_TRASH />
             </span>
           </div>
         </div>

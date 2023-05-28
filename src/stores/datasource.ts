@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { API } from '@/api';
 import { store } from '@/stores/index';
+import { useGlobalStore } from './global';
 
 interface DatasourceState {
   datasourceList: any[];
@@ -40,10 +41,10 @@ export const useDSStore = defineStore('datasource', {
       return state.metric;
     },
     getStartDt(state): Date {
-      return state.startDt;
+      return useGlobalStore().startDt;
     },
     getEndDt(state): Date {
-      return state.endDt;
+      return useGlobalStore().endDt;
     },
   },
 
@@ -79,7 +80,7 @@ export const useDSStore = defineStore('datasource', {
       const res = await API.datasource.loadChartDataByMetricAndBetweenDates(
         this.datasourceId,
         this.metric,
-        this.startDt,
+        useGlobalStore().startDt,
         this.endDt
       );
       this.chartData = res.data;
@@ -89,9 +90,6 @@ export const useDSStore = defineStore('datasource', {
       this.metric = metric;
     },
     async setCurrentDatasourceId(id: number) {
-      this.startDt = new Date(Date.now() - 3600 * 6 * 1000);
-      this.endDt = new Date(Date.now() + 3600 * 6 * 1000);
-
       this.datasourceId = id;
       this.setMetric('');
       this.metricsList = [];

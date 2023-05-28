@@ -4,8 +4,16 @@ import DatePicker from 'vue2-datepicker';
 import {onMounted, ref, watch} from 'vue';
 import 'vue2-datepicker/index.css';
 import { useDSStore } from '@/stores/datasource';
+import { useGlobalStore } from '@/stores/global';
+import { useSocketStore } from '@/stores/socket';
+import { messageParamsFactory } from '@vuelidate/validators';
+import { API } from '@/api';
 
 const store = useDSStore();
+const globalStore = useGlobalStore();
+const socketStore = useSocketStore();
+
+const lock = ref(true)
 
 const seriesData = ref<any[]>([]);
 
@@ -67,7 +75,9 @@ onMounted(() => {
 watch(
   () => store.getChartData,
   () => {
+    lock.value = true;
     drawChart();
+    lock.value = false;
   }
 );
 
@@ -83,6 +93,22 @@ const searchByDates = async () => {
     await store.loadChartDataByMetricAndBetweenDates();
   }
 };
+
+watch(
+  () => socketStore.getMessage,
+  async val => {
+    if (val.type === 'SC_METRIC_UPDATED') {
+      if (val.datasourceId === store.getCurrentDatasourceId && val.metric === store.getMetric)  [
+        const res = await API.datasource.loadChartDataByMetricAndBetweenDates(
+          store.getCurrentDatasourceId,
+          store.getMetric,
+          new Date(val.startAt),
+          new Date(val.stopAt)
+        );
+      ]
+    }
+  }
+);
 </script>
 
 <template>
@@ -101,7 +127,7 @@ const searchByDates = async () => {
               </b-input-group-text>
             </b-input-group-prepend>
             <date-picker
-              v-model="store.startDt"
+              v-model="globalStore.startDt"
               placeholder=""
               type="datetime"
             />
@@ -113,7 +139,7 @@ const searchByDates = async () => {
                 END
               </b-input-group-text>
             </b-input-group-prepend>
-            <date-picker v-model="store.endDt" placeholder="" type="datetime" />
+            <date-picker v-model="globalStore.endDt" placeholder="" type="datetime" />
           </b-input-group>
 
           <b-button class="mt-[-5px]" variant="primary" @click="searchByDates">

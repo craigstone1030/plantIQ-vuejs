@@ -80,10 +80,8 @@ watch(
   async val => {
     if (val === -1) return;
     globalStore.disableLock();
-    const res = await API.detector.loadRecordsByDetectorIdAndBetweenDates(
-      val,
-      new Date(Date.now() - 60 * 5 * 1000),
-      new Date()
+    const res = await API.detector.loadTrendGraphByDetectorId(
+      val
     );
     globalStore.enableLock();
     rawChartData.value = res.data;

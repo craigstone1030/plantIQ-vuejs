@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { API } from '@/api';
+import { useGlobalStore } from './global';
 
 interface DashboardState {
   chartData: any;
@@ -44,8 +45,8 @@ export const useDashboardStore = defineStore('dashboard', {
     async loadChartDataByDetectorId() {
       const res = await API.detector.loadGraphDataByDetectorIdAndBetweenDates(
         this.selectedDetectorId,
-        this.startDt,
-        this.endDt
+        useGlobalStore().startDt,
+        useGlobalStore().endDt
       );
       this.chartData = {
         alert: res.data.alert ? JSON.parse(res.data.alert) : {},

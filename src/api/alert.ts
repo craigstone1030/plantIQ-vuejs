@@ -18,6 +18,15 @@ export default {
     });
   },
 
+  async updateStatusByAlertId(id: number, status: number) {
+    return await appHttp.get('/api/alert/setstatus', {
+      params: {
+        id,
+        status,
+      },
+    });
+  },
+
   async updateAlert(id: number, payload: any) {
     return await appHttp.get('/api/alert/update', {
       params: {
@@ -39,7 +48,7 @@ export default {
     });
   },
 
-  async setAlertStatus(id: number, status: boolean) {
+  async setAlertStatus(id: number, status: number) {
     return await appHttp.get('/api/alert/setstatus', {
       params: { id, status },
     });

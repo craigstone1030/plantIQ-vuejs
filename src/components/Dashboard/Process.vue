@@ -7,6 +7,7 @@ const emit = defineEmits(['click']);
 
 const props = defineProps({
   id: { type: Number, required: true },
+  name: { type: String, required: true },
   status: { type: Number, required: true },
   active: { type: Boolean, default: false },
   maxAnomaly: { type: Number, required: true },
@@ -32,7 +33,7 @@ const onSelect = () => {
     :class="{ active: active }"
     @click="onSelect"
   >
-    <div class="text-lg font-weight-bold text-center mb-2">Energy Anomaly</div>
+    <div class="text-lg font-weight-bold text-center mb-2">{{ name }}</div>
 
     <div class="d-flex justify-content-center space-x-4 mb-2">
       <div class="d-flex flex-column gap-[.25rem]">

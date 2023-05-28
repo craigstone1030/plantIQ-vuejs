@@ -12,7 +12,11 @@ watch(
   () => store.getSelectedProcessId,
   async val => {
     if (val !== -1) {
+      console.log(val)
       await store.loadMonitorsByProcessId();
+      if (store.getMonitors.length !== 0) {
+        store.setCurrentDetectorId(store.getMonitors[0].detectorId);
+      }
     }
   }
 );
@@ -47,6 +51,7 @@ const onSelectMonitor = (id: number) => {
       :key="index"
       :active="store.getSelectedDetectorId === process.detectorId"
       :actual-score="process.actualScore"
+      :name="process.name"
       :date="process.lastUpdatedAt"
       :max-anomaly="process.maxAnomaly"
       :status="process.status"

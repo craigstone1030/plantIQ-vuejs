@@ -2,8 +2,11 @@
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import { useDashboardStore } from '@/stores/dashboard';
+import { useGlobalStore } from '@/stores/global';
 
 const store = useDashboardStore();
+
+const globalStore = useGlobalStore();
 
 const onClick = () => {
   store.loadChartDataByDetectorId();
@@ -19,7 +22,7 @@ const onClick = () => {
             START
           </b-input-group-text>
         </b-input-group-prepend>
-        <date-picker v-model="store.startDt" placeholder="" type="datetime" />
+        <date-picker v-model="globalStore.startDt" placeholder="" type="datetime" />
       </b-input-group>
 
       <b-input-group class="mb-2 justify-center">
@@ -28,7 +31,7 @@ const onClick = () => {
             END
           </b-input-group-text>
         </b-input-group-prepend>
-        <date-picker v-model="store.endDt" placeholder="" type="datetime" />
+        <date-picker v-model="globalStore.endDt" placeholder="" type="datetime" />
       </b-input-group>
 
       <div class="mt-3 text-center">

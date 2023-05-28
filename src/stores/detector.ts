@@ -47,10 +47,10 @@ export const useDetectorStore = defineStore('detector', {
       return state.chartData;
     },
     getStartDt(state) {
-      return state.startDt;
+      return useGlobalStore().startDt;
     },
     getEndDt(state) {
-      return state.endDt;
+      return useGlobalStore().endDt;
     },
   },
 
@@ -98,8 +98,8 @@ export const useDetectorStore = defineStore('detector', {
       this.lock = true;
       const res = await API.detector.loadRecordsByDetectorIdAndBetweenDates(
         this.detectorId,
-        this.startDt,
-        this.endDt
+        useGlobalStore().startDt,
+        useGlobalStore().endDt
       );
       this.chartData = res.data;
       this.lock = false;
@@ -130,8 +130,8 @@ export const useDetectorStore = defineStore('detector', {
     },
     setCurrentDetector(id: number) {
       this.detectorId = id;
-      this.startDt = new Date(Date.now() - 3600 * 6 * 1000);
-      this.endDt = new Date(Date.now() + 3600 * 6 * 1000);
+      useGlobalStore().startDt = new Date(Date.now() - 3600 * 6 * 1000);
+      useGlobalStore().endDt = new Date(Date.now() + 3600 * 6 * 1000);
       this.metrics = [];
       this.chartData = [];
       this.process = null;

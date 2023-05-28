@@ -24,11 +24,11 @@ import { appHttp } from '@/axios';
 Vue.config.productionTip = false;
 Vue.component('Teleport', teleport);
 Vue.filter('date_format', (value: Date | string) => {
-  if (value === null) return 'NaN';
+  if (value === null) return 'None';
   const data = new Date(value);
   const year = data.getFullYear();
-  const month = data.getMonth();
-  const day = data.getDay();
+  const month = data.getMonth() + 1;
+  const day = data.getDate();
   return `${year}/${month}/${day}`;
 });
 Vue.filter('time_format', (value: Date | string) => {
@@ -40,7 +40,7 @@ Vue.filter('time_format', (value: Date | string) => {
   return `${hour}:${min}:${sec}`;
 });
 Vue.filter('number', (value: number) => {
-  if (value == null) return 'NaN';
+  if (value == null) return 'None';
   return value.toFixed(2);
 });
 
