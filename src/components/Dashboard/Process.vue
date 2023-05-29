@@ -53,7 +53,7 @@ const onSelect = () => {
         <div
           class="h-100 d-flex justify-center align-items-center text-lg font-semibold text-[#2F80ED]"
         >
-          {{ topAlerts | number }}
+          {{ topAlerts | integer }}
         </div>
       </div>
       <div class="d-flex flex-column gap-[.25rem]">

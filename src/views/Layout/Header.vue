@@ -73,7 +73,7 @@ const onLogout = () => {
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="!hidden lg:!flex h-[70px] place-items-center">
-        <b-nav-item-dropdown class="vertical-center" no-caret right>
+        <!-- <b-nav-item-dropdown class="vertical-center" no-caret right>
           <template #button-content>
             <img :src="ICON_FLAG_US" alt="flag_us" width="25" />
           </template>
@@ -101,7 +101,7 @@ const onLogout = () => {
           <b-dropdown-item href="#">ES</b-dropdown-item>
           <b-dropdown-item href="#">RU</b-dropdown-item>
           <b-dropdown-item href="#">FA</b-dropdown-item>
-        </b-nav-item-dropdown>
+        </b-nav-item-dropdown> -->
 
         <b-nav-item-dropdown
           v-show="globalStore.getCurrentUser.username"

@@ -10,6 +10,7 @@ const props = defineProps<{
 
 const seriesData = ref<any[]>([]);
 const rawChartData = ref<any[]>([]);
+const loading = ref(true);
 const socketStore = useSocketStore();
 const globalStore = useGlobalStore();
 
@@ -60,7 +61,7 @@ const drawChart = (chartData: any[]) => {
       series[jsonData[i][0]] = [];
     }
     series[jsonData[i][0]].push([
-      new Date(jsonData[i][1]).getTime(),
+      new Date(jsonData[i][1]).getTime() - new Date().getTimezoneOffset() * 60000,
       jsonData[i][2],
     ]);
   }
@@ -73,6 +74,8 @@ const drawChart = (chartData: any[]) => {
     });
     return null;
   });
+
+  loading.value = false;
 };
 
 watch(
@@ -80,6 +83,7 @@ watch(
   async val => {
     if (val === -1) return;
     globalStore.disableLock();
+    loading.value = true;
     const res = await API.detector.loadTrendGraphByDetectorId(
       val
     );
@@ -113,7 +117,8 @@ watch(
 </script>
 
 <template>
-  <b-overlay :show="seriesData.length == 0">
+  <b-overlay :show="loading">
+    <div v-if="rawChartData.length === 0">No data</div>
     <highcharts :constructor-type="'stockChart'" :options="chartOptions" />
   </b-overlay>
 </template>

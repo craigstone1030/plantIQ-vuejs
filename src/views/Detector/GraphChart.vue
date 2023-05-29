@@ -75,7 +75,7 @@ const drawChart = () => {
       series[jsonData[i][0]] = [];
     }
     series[jsonData[i][0]].push([
-      new Date(jsonData[i][1]).getTime(),
+      new Date(jsonData[i][1]).getTime() - new Date().getTimezoneOffset() * 60000,
       jsonData[i][2],
     ]);
   }

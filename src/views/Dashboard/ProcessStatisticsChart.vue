@@ -63,7 +63,7 @@ watch(
       if (series[jsonData[i][0]] === undefined) {
         series[jsonData[i][0]] = [];
       }
-      series[jsonData[i][0]].push([new Date(jsonData[i][1]), jsonData[i][2]]);
+      series[jsonData[i][0]].push([new Date(jsonData[i][1]).getTime() - new Date().getTimezoneOffset() * 60000, jsonData[i][2]]);
     }
 
     seriesData.value.splice(0);
@@ -83,6 +83,7 @@ watch(
       treshold1: {
         type: 'flags',
         name: 'NearCriticalTreshold',
+        color: 'blue',
         accessibility: {
           exposeAsGroupOnly: true,
           description: 'Flagged events.',
@@ -99,6 +100,7 @@ watch(
       treshold2: {
         type: 'flags',
         name: 'CriticalTreshold',
+        color: 'red',
         accessibility: {
           exposeAsGroupOnly: true,
           description: 'Flagged events.',
@@ -115,6 +117,7 @@ watch(
       treshold3: {
         type: 'flags',
         name: 'Normal',
+        color: 'green',
         accessibility: {
           exposeAsGroupOnly: true,
           description: 'Flagged events.',

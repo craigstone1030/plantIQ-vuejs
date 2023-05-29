@@ -7,6 +7,8 @@ import TightChart from '@/components/Dashboard/TightChart.vue';
 import { useGlobalStore } from '@/stores/global';
 import { useProcessStore } from '@/stores/process';
 
+import { Carousel, Slide } from 'vue-carousel';
+
 const store = useDashboardStore();
 const processStore = useProcessStore();
 const globalStore = useGlobalStore();
@@ -73,7 +75,11 @@ onMounted(async () => {
     @click="clickEvent"
   >
     <div class="d-flex justify-between">
-      <a class="text-base font-weight-bold hover:cursor-pointer" :style="{ whiteSpace: 'nowrap'}" href="#">
+      <a
+        class="text-base font-weight-bold hover:cursor-pointer"
+        :style="{ whiteSpace: 'nowrap' }"
+        href="#"
+      >
         {{ fields.name }}
       </a>
       <span
@@ -92,21 +98,47 @@ onMounted(async () => {
       <tight-chart :detector-id="selectedDetectorId" />
     </div>
 
-    <div class="d-flex justify-center gap-[1rem]">
-      <button
-        v-for="(detector, index) in detectors"
-        :key="index"
-        :style="{
-          backgroundColor:
-            color[convertToStatus(detector.fields.status)] + '50',
-          color: color[convertToStatus(detector.fields.status)],
-          border: selectedDetectorId === detector.pk ? '1px solid red' : 'none',
-        }"
-        class="px-1 py-[0.1rem] rounded-lg"
-        @click="onClickEvent(detector.pk)"
-      >
-        {{ detector.fields.name }}
-      </button>
+    <!-- <div class="d-flex justify-center gap-[1rem]"> -->
+    <div className="flex w-full">
+      <carousel>
+        <slide
+          v-for="(detector, index) in detectors"
+          :key="index"
+          class="w-6/12"
+        >
+          <button
+            v-b-tooltip.hover
+            :title="detector.fields.name"
+            :style="{
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              width: '100%',
+              backgroundColor:
+                color[convertToStatus(detector.fields.status)] + '50',
+              color: color[convertToStatus(detector.fields.status)],
+              border:
+                selectedDetectorId === detector.pk ? '1px solid red' : 'none',
+            }"
+            class="px-1 py-[0.1rem] rounded-lg"
+            @click="onClickEvent(detector.pk)"
+          >
+            {{ detector.fields.name }}
+          </button>
+        </slide>
+      </carousel>
     </div>
+    <!-- </div> -->
   </b-card>
 </template>
+<style>
+.VueCarousel-slide {
+  padding: 0 5px;
+}
+.VueCarousel-dot-container {
+  margin-top: 0 !important;
+}
+.VueCarousel-dot {
+  margin-top: 0 !important;
+}
+</style>

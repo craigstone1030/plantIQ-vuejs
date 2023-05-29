@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { API } from '@/api';
-import { useGlobalStore } from './global';
+import { useGlobalStore, useGlobalStoreWithOut } from './global';
 
 interface DashboardState {
   chartData: any;
@@ -53,12 +53,24 @@ export const useDashboardStore = defineStore('dashboard', {
         histories: res.data.histories ? res.data.histories : [],
         records: res.data.records ? JSON.parse(res.data.records) : [],
       };
+
+      const globalStore = useGlobalStore();
+
+      const monitorData = await API.process.loadMonitorsByProcessId(
+        this.selectedProcessId,
+        globalStore.startDt,
+        globalStore.endDt
+      );
+      this.monitors = monitorData.data;
     },
 
     async loadMonitorsByProcessId() {
+      const globalStore = useGlobalStore();
       this.selectedDetectorId = -1;
       const res = await API.process.loadMonitorsByProcessId(
-        this.selectedProcessId
+        this.selectedProcessId,
+        globalStore.startDt,
+        globalStore.endDt
       );
       this.monitors = res.data;
     },

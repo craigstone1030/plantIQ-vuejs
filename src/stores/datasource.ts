@@ -81,7 +81,7 @@ export const useDSStore = defineStore('datasource', {
         this.datasourceId,
         this.metric,
         useGlobalStore().startDt,
-        this.endDt
+        useGlobalStore().endDt
       );
       this.chartData = res.data;
     },
@@ -99,8 +99,6 @@ export const useDSStore = defineStore('datasource', {
 
       if (this.getMetricsList.length > 0) {
         this.setMetric(this.getMetricsList[0]);
-
-        await this.loadChartDataByMetricAndBetweenDates();
       } else {
         this.setMetric('');
       }

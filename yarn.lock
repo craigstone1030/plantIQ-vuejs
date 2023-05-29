@@ -2292,6 +2292,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dom-walk@npm:^0.1.0":
+  version: 0.1.2
+  resolution: "dom-walk@npm:0.1.2"
+  checksum: 19eb0ce9c6de39d5e231530685248545d9cd2bd97b2cb3486e0bfc0f2a393a9addddfd5557463a932b52fdfcf68ad2a619020cd2c74a5fe46fbecaa8e80872f3
+  languageName: node
+  linkType: hard
+
 "domelementtype@npm:1":
   version: 1.3.1
   resolution: "domelementtype@npm:1.3.1"
@@ -3574,6 +3581,16 @@ eslint-config-standard-with-typescript@latest:
     kind-of: ^6.0.2
     which: ^1.3.1
   checksum: 8a82fc1d6f22c45484a4e34656cc91bf021a03e03213b0035098d605bfc612d7141f1e14a21097e8a0413b4884afd5b260df0b6a25605ce9d722e11f1df2881d
+  languageName: node
+  linkType: hard
+
+"global@npm:^4.3.2":
+  version: 4.4.0
+  resolution: "global@npm:4.4.0"
+  dependencies:
+    min-document: ^2.19.0
+    process: ^0.11.10
+  checksum: 9c057557c8f5a5bcfbeb9378ba4fe2255d04679452be504608dd5f13b54edf79f7be1db1031ea06a4ec6edd3b9f5f17d2d172fb47e6c69dae57fd84b7e72b77f
   languageName: node
   linkType: hard
 
@@ -5015,6 +5032,15 @@ eslint-config-standard-with-typescript@latest:
   languageName: node
   linkType: hard
 
+"min-document@npm:^2.19.0":
+  version: 2.19.0
+  resolution: "min-document@npm:2.19.0"
+  dependencies:
+    dom-walk: ^0.1.0
+  checksum: da6437562ea2228041542a2384528e74e22d1daa1a4ec439c165abf0b9d8a63e17e3b8a6dc6e0c731845e85301198730426932a0e813d23f932ca668340c9623
+  languageName: node
+  linkType: hard
+
 "min-indent@npm:^1.0.0":
   version: 1.0.1
   resolution: "min-indent@npm:1.0.1"
@@ -6075,6 +6101,13 @@ eslint-config-standard-with-typescript@latest:
   languageName: node
   linkType: hard
 
+"process@npm:^0.11.10":
+  version: 0.11.10
+  resolution: "process@npm:0.11.10"
+  checksum: bfcce49814f7d172a6e6a14d5fa3ac92cc3d0c3b9feb1279774708a719e19acd673995226351a082a9ae99978254e320ccda4240ddc474ba31a76c79491ca7c3
+  languageName: node
+  linkType: hard
+
 "promise-inflight@npm:^1.0.1":
   version: 1.0.1
   resolution: "promise-inflight@npm:1.0.1"
@@ -6251,6 +6284,13 @@ eslint-config-standard-with-typescript@latest:
     indent-string: ^4.0.0
     strip-indent: ^3.0.0
   checksum: fa1ef20404a2d399235e83cc80bd55a956642e37dd197b4b612ba7327bf87fa32745aeb4a1634b2bab25467164ab4ed9c15be2c307923dd08b0fe7c52431ae6b
+  languageName: node
+  linkType: hard
+
+"regenerator-runtime@npm:^0.12.1":
+  version: 0.12.1
+  resolution: "regenerator-runtime@npm:0.12.1"
+  checksum: 348c401336bcebe2be17fd4f24c5b0a1ed75bff3024dc817a69cdc776b48b98c7f6f3b98e1baa4220569440bb9215e1fff3dcb01c8aad3ff2ed3732e30d017bf
   languageName: node
   linkType: hard
 
@@ -7892,6 +7932,7 @@ eslint-config-standard-with-typescript@latest:
     vite-plugin-checker: ^0.5.6
     vitest: ^0.29.7
     vue: ^2.7.14
+    vue-carousel: ^0.18.0
     vue-eslint-parser: ^9.1.0
     vue-notification: ^1.3.20
     vue-router: ^3.6.5
@@ -8063,6 +8104,17 @@ eslint-config-standard-with-typescript@latest:
   languageName: node
   linkType: hard
 
+"vue-carousel@npm:^0.18.0":
+  version: 0.18.0
+  resolution: "vue-carousel@npm:0.18.0"
+  dependencies:
+    global: ^4.3.2
+    regenerator-runtime: ^0.12.1
+    vue: ^2.5.17
+  checksum: 27b73ce19392a0a3d6e617efea61e65e70ad9035fbaf1747917ec88b5a8d2b3c57999e578d189532191b3ece1d9b54bda6cbb7ceee65bbdbb341b7ce20388ce7
+  languageName: node
+  linkType: hard
+
 "vue-demi@latest, vue-demi@npm:*":
   version: 0.14.5
   resolution: "vue-demi@npm:0.14.5"
@@ -8221,7 +8273,7 @@ eslint-config-standard-with-typescript@latest:
   languageName: node
   linkType: hard
 
-"vue@npm:^2.5.0, vue@npm:^2.6.10, vue@npm:^2.7.14":
+"vue@npm:^2.5.0, vue@npm:^2.5.17, vue@npm:^2.6.10, vue@npm:^2.7.14":
   version: 2.7.14
   resolution: "vue@npm:2.7.14"
   dependencies:

@@ -49,10 +49,12 @@ export default {
       },
     });
   },
-  async loadMonitorsByProcessId(id: number) {
+  async loadMonitorsByProcessId(id: number, startDt: Date, endDt: Date) {
     return await appHttp.get('/api/process/monitors', {
       params: {
         processId: id,
+        startAt: startDt,
+        stopAt: endDt,
       },
     });
   },

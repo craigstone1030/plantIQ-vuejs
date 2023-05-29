@@ -6,6 +6,9 @@ import HighchartsStockModule from 'highcharts/modules/stock';
 import HighchartsVue from 'highcharts-vue';
 import Notifications from 'vue-notification';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import VueCarousel from 'vue-carousel';
+
 import { store } from '@/stores';
 import { openSocket } from './socket';
 
@@ -43,6 +46,10 @@ Vue.filter('number', (value: number) => {
   if (value == null) return 'None';
   return value.toFixed(2);
 });
+Vue.filter('integer', (value: number) => {
+  if (value == null) return 'None';
+  return value.toFixed();
+});
 
 if (localStorage.getItem('plant-iq-token')) {
   appHttp.defaults.headers.common.Authorization =
@@ -54,6 +61,8 @@ Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 // Notification Config
 Vue.use(Notifications);
+
+Vue.use(VueCarousel);
 
 // Chart Config
 HighchartsStockModule(Highcharts);

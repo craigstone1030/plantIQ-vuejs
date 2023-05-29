@@ -105,13 +105,14 @@ export const useDetectorStore = defineStore('detector', {
       this.lock = false;
     },
     async loadMoreRecords(message: any) {
+      const globalStore = useGlobalStoreWithOut();
       if (!this.lock) {
         const startTime = Math.min(
-          this.endDt.getTime(),
+          globalStore.endDt.getTime(),
           new Date(message.startAt).getTime()
         );
         const endTime = Math.max(
-          this.endDt.getTime(),
+          globalStore.endDt.getTime(),
           new Date(message.stopAt).getTime()
         );
 

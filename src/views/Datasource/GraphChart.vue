@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import ICON_GRAPH from '@/assets/icon/graph.vue';
 import DatePicker from 'vue2-datepicker';
-import {onMounted, ref, watch} from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import 'vue2-datepicker/index.css';
 import { useDSStore } from '@/stores/datasource';
 import { useGlobalStore } from '@/stores/global';
@@ -13,7 +13,7 @@ const store = useDSStore();
 const globalStore = useGlobalStore();
 const socketStore = useSocketStore();
 
-const lock = ref(true)
+const lock = ref(true);
 
 const seriesData = ref<any[]>([]);
 
@@ -51,7 +51,7 @@ const drawChart = () => {
       series[jsonData[i][0]] = [];
     }
     series[jsonData[i][0]].push([
-      new Date(jsonData[i][1]).getTime(),
+      new Date(jsonData[i][1]).getTime() - new Date().getTimezoneOffset() * 60000,
       jsonData[i][2],
     ]);
   }
@@ -67,9 +67,9 @@ const drawChart = () => {
 };
 
 onMounted(() => {
-  if (store.getChartData.length) {
-    drawChart();
-  }
+  // if (store.getChartData.length) {
+  //   drawChart();
+  // }
 });
 
 watch(
@@ -90,22 +90,32 @@ watch(
 
 const searchByDates = async () => {
   if (store.getCurrentDatasourceId !== -1) {
+    lock.value = true;
     await store.loadChartDataByMetricAndBetweenDates();
+    lock.value = false;
   }
 };
 
 watch(
-  () => socketStore.getMessage,
+  () => socketStore.currentMessage,
   async val => {
-    if (val.type === 'SC_METRIC_UPDATED') {
-      if (val.datasourceId === store.getCurrentDatasourceId && val.metric === store.getMetric)  [
+    console.log(val);
+    if (val.type === 'SC_METRIC_UPDATED' && lock.value === false) {
+      if (
+        val.datasourceId === store.getCurrentDatasourceId &&
+        val.metric === store.getMetric
+      ) {
+        globalStore.disableLock();
         const res = await API.datasource.loadChartDataByMetricAndBetweenDates(
           store.getCurrentDatasourceId,
           store.getMetric,
           new Date(val.startAt),
           new Date(val.stopAt)
         );
-      ]
+        const newData = res.data;
+        globalStore.enableLock();
+        store.chartData = store.chartData.concat(newData);
+      }
     }
   }
 );
@@ -139,7 +149,11 @@ watch(
                 END
               </b-input-group-text>
             </b-input-group-prepend>
-            <date-picker v-model="globalStore.endDt" placeholder="" type="datetime" />
+            <date-picker
+              v-model="globalStore.endDt"
+              placeholder=""
+              type="datetime"
+            />
           </b-input-group>
 
           <b-button class="mt-[-5px]" variant="primary" @click="searchByDates">
