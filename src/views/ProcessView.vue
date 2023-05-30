@@ -2,14 +2,6 @@
 import ProcessList from '@/views/Process/ProcessList.vue';
 import MetricsTable from '@/views/Process/MetricsTable.vue';
 import DetectorsList from '@/views/Process/DetectorsList.vue';
-import { useProcessStore } from '@/stores/process';
-import { onMounted } from 'vue';
-
-const store = useProcessStore();
-
-onMounted(() => {
-  store.loadProcessList();
-});
 </script>
 
 <template>

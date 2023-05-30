@@ -10,7 +10,13 @@ import ProcessModal from '@/views/Process/ProcessModal.vue';
 import UpdateProcessModal from '@/views/Process/UpdateProcessModal.vue';
 import Swal from "sweetalert2";
 
-const store = useProcessStore();
+const store = useProcessStore()
+
+onMounted(async () => {
+  await store.loadProcessList();
+  if (store.processList.length)
+    await clickEvent(store.processList[0].pk)
+});
 
 const processList = computed(() => {
   return store.getProcessList;

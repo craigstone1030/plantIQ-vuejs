@@ -8,7 +8,7 @@ import ICON_NAV_DETECTORS from '@/assets/icon/nav/detectors.vue';
 import ICON_NAV_ALERTS from '@/assets/icon/nav/alerts.vue';
 
 import ICON_FLAG_US from '@/assets/icon/flag/us.png';
-import IMG_AVATAR from '@/assets/icon/avatar.png';
+import IMG_AVATAR from '@/assets/avatar.png';
 import ICON_NAV_SETTING from '@/assets/icon/nav/setting.vue';
 import ICON_NAV_BELL from '@/assets/icon/nav/bell.vue';
 import NavItem from '@/components/nav/NavItem.vue';

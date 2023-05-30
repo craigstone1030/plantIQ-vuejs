@@ -13,8 +13,10 @@ import Swal from 'sweetalert2';
 
 const store = useDSStore();
 
-onMounted(() => {
-  store.loadDatasource();
+onMounted(async () => {
+  await store.loadDatasource();
+  if (store.getDatasourceList.length)
+    await dbItemClicked(store.getDatasourceList[0].pk)
 });
 
 const dbItemClicked = async (id: number) => {

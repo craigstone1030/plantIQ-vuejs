@@ -3,14 +3,6 @@ import MetricsTable from '@/views/Detector/MetricsTable.vue';
 import DetectorsList from '@/views/Detector/DetectorsList.vue';
 import ProcessList from '@/views/Detector/ProcessList.vue';
 import GraphChart from '@/views/Detector/GraphChart.vue';
-import { onMounted } from 'vue';
-import { useDetectorStore } from '@/stores/detector';
-
-const store = useDetectorStore();
-
-onMounted(async () => {
-  await store.loadDetectorList();
-});
 </script>
 
 <template>

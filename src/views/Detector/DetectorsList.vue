@@ -3,7 +3,7 @@ import ICON_DETECTOR from '@/assets/icon/nav/detectors.vue';
 import ICON_TRASH from '@/assets/icon/trash.vue';
 import ICON_PLUS from '@/assets/icon/plus.vue';
 import ICON_EDIT from '@/assets/icon/edit.vue';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useDetectorStore } from '@/stores/detector';
 import DetectorListItem from '@/components/Process/DetectorListItem.vue';
 import DetectorModal from '@/views/Detector/DetectorModal.vue';
@@ -11,6 +11,12 @@ import UpdateDetectorModal from '@/views/Detector/UpdateDetectorModal.vue';
 import Swal from 'sweetalert2';
 
 const store = useDetectorStore();
+
+onMounted(async () => {
+  await store.loadDetectorList();
+  if (store.detectors.length)
+    await onSelectDetector(store.detectors[0].pk);
+});
 
 const detectorList = computed(() => {
   return store.getDetectors;

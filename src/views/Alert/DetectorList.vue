@@ -16,6 +16,8 @@ const alertStore = useAlertStore();
 
 const onSelectDetector = async (id: number) => {
   alertStore.setCurrentDetectorId(id);
+  alertStore.setCurrentAlertId(-1);
+  alertStore.history = [];
   await alertStore.loadAlertsByDetectorId();
 };
 

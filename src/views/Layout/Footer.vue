@@ -6,7 +6,7 @@ const globalStore = useGlobalStore();
 <template>
   <footer v-show="globalStore.getCurrentUser.email" class="sticky-bottom">
     <div class="bg-nav text-center p-3 text-[#98A6BA] z-9999">
-      2023 &copy; Plant-IQ by Coolper Jack
+      2023 &copy; Plant-IQ by Ai-inside Private
     </div>
   </footer>
 </template>

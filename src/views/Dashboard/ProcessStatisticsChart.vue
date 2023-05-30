@@ -13,9 +13,11 @@ const plotLines = ref<any[]>([]);
 
 const lock = ref(true);
 
+const chartRef = ref(null);
+
 const chartOptions = ref({
   rangeSelector: {
-    selector: 1,
+    selector: 6,
   },
   xAxis: {
     type: 'datetime',
@@ -63,7 +65,11 @@ watch(
       if (series[jsonData[i][0]] === undefined) {
         series[jsonData[i][0]] = [];
       }
-      series[jsonData[i][0]].push([new Date(jsonData[i][1]).getTime() - new Date().getTimezoneOffset() * 60000, jsonData[i][2]]);
+      series[jsonData[i][0]].push([
+        new Date(jsonData[i][1]).getTime() -
+          new Date().getTimezoneOffset() * 60000,
+        jsonData[i][2],
+      ]);
     }
 
     seriesData.value.splice(0);
@@ -186,6 +192,9 @@ watch(
       }
     } catch (e) {}
     /* END High & Low Line */
+
+    console.log(chartRef.value.chart);
+    chartRef.value.chart.zoomOut();
   }
 );
 
@@ -195,7 +204,6 @@ watch(
     if (val.type === 'NEW_ALERTS' && lock.value === false) {
       if (store.getSelectedDetectorId === val.detectorId) {
         const alerts = JSON.parse(val.alerts);
-        console.log(alerts);
         for (let i = 0; i < alerts.length; i++) {
           if (alerts[i].alertType === 1) {
             seriesData.value[seriesData.value.length - 3].data.push({
@@ -230,7 +238,9 @@ watch(
       <span v-if="store.getSelectedDetectorId !== -1">
         -
         {{
-          store.getMonitors.find(i => i.detectorId === store.getSelectedDetectorId).name
+          store.getMonitors.find(
+            i => i.detectorId === store.getSelectedDetectorId
+          ).name
         }}
       </span>
     </p>
@@ -241,7 +251,11 @@ watch(
         store.getChartData.records.length !== 0
       "
     > -->
-      <highcharts :constructor-type="'stockChart'" :options="chartOptions" />
+    <highcharts
+      :constructor-type="'stockChart'"
+      :options="chartOptions"
+      ref="chartRef"
+    />
     <!-- </div> -->
     <!-- <span v-else>No data ...</span> -->
   </b-card>

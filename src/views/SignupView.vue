@@ -2,6 +2,7 @@
 import Vue, { ref } from 'vue';
 import { useGlobalStore } from '@/stores/global';
 import { useRouter } from 'vue-router/composables';
+import logo from '@/assets/logo_black.svg';
 
 const globalStore = useGlobalStore();
 const router = useRouter();
@@ -38,13 +39,9 @@ const onSubmit = async (event: Event) => {
     >
       <div class="text-center">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            class="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Your Company"
-          />
+          <img :src="logo" alt="Vue logo" width="170" height="70" class="my-4" />
           <h2
-            class="mt-10 mb-3 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+            class="mb-3 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
           >
             Sign up to your account
           </h2>

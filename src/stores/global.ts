@@ -31,8 +31,8 @@ export const useGlobalStore = defineStore('global', {
       email: '',
       username: '',
     },
-    startDt: new Date(new Date().getTime() - 3600 * 6 * 1000),
-    endDt: new Date(new Date().getTime() + 3600 * 6 * 1000),
+    startDt: new Date(new Date().getTime() - 3600 * 12 * 1000),
+    endDt: new Date(new Date().getTime()),
   }),
   getters: {
     getOverlay(state): boolean {
