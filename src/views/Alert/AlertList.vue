@@ -3,12 +3,12 @@ import ICON_ALERT from '@/assets/icon/nav/alerts.vue';
 import ICON_TRASH from '@/assets/icon/trash.vue';
 import ICON_PLUS from '@/assets/icon/plus.vue';
 import ICON_EDIT from '@/assets/icon/edit.vue';
-import {computed} from 'vue';
+import { computed, onMounted, watch } from 'vue';
 import Swal from 'sweetalert2';
-import AlertListItem from "@/components/Alert/AlertListItem.vue";
-import {useAlertStore} from "@/stores/alert";
-import CreateAlertModal from "@/views/Alert/CreateAlertModal.vue";
-import UpdateAlertModal from "@/views/Alert/UpdateAlertModal.vue";
+import AlertListItem from '@/components/Alert/AlertListItem.vue';
+import { useAlertStore } from '@/stores/alert';
+import CreateAlertModal from '@/views/Alert/CreateAlertModal.vue';
+import UpdateAlertModal from '@/views/Alert/UpdateAlertModal.vue';
 
 const store = useAlertStore();
 
@@ -22,8 +22,7 @@ const onSelectAlert = async (id: number) => {
 };
 
 const onDeleteEvent = async () => {
-  if(store.getSelectedAlertId === -1)
-    return;
+  if (store.getSelectedAlertId === -1) return;
 
   const r = await Swal.fire({
     icon: 'question',
@@ -43,6 +42,17 @@ const onDeleteEvent = async () => {
     });
   }
 };
+
+watch(
+  () => store.getSelectedDetectorId,
+  async val => {
+    store.setCurrentAlertId(-1);
+    store.history = [];
+    await store.loadAlertsByDetectorId();
+    if (store.alerts.length)
+      await onSelectAlert(store.alerts[0].pk)
+  }
+);
 </script>
 
 <template>
@@ -51,7 +61,7 @@ const onDeleteEvent = async () => {
       <template #header>
         <div class="d-flex justify-between">
           <div class="card-head d-inline-flex place-items-center">
-            <ICON_ALERT class="mr-1" variant="dark"/>
+            <ICON_ALERT class="mr-1" variant="dark" />
             Alerts ({{ alertsList.length }})
           </div>
           <div class="d-inline-flex place-items-center">
@@ -68,7 +78,7 @@ const onDeleteEvent = async () => {
               :role="store.getSelectedAlertId === -1 ? '' : 'button'"
               :disabled="store.getSelectedAlertId === -1"
             >
-              <ICON_EDIT/>
+              <ICON_EDIT />
             </span>
             <update-alert-modal />
             <span
@@ -84,9 +94,7 @@ const onDeleteEvent = async () => {
       </template>
       <template #default>
         <div class="max-h-[1000px] overflow-y-auto detector-list">
-          <span v-if="alertsList.length === 0">
-            Empty alerts ...
-          </span>
+          <span v-if="alertsList.length === 0">Empty alerts ...</span>
 
           <alert-list-item
             v-for="(alert, index) in alertsList"

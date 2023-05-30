@@ -2,14 +2,6 @@
 import DetectorList from "@/views/Alert/DetectorList.vue";
 import AlertList from "@/views/Alert/AlertList.vue";
 import AlertHistoryTable from "@/views/Alert/AlertHistoryTable.vue";
-import {useDetectorStore} from "@/stores/detector";
-import {onMounted} from "vue";
-
-const store = useDetectorStore();
-
-onMounted(async () => {
-  await store.loadDetectorList();
-});
 </script>
 
 <template>
